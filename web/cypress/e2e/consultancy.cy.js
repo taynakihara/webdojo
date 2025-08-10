@@ -1,83 +1,104 @@
-describe('Formulário de Consultoria', () => {
+describe("Formulário de Consultoria", () => {
+    it("Deve solicitar consultoria individual", () => {
+        cy.start();
+        cy.submitLoginForm("papito@webdojo.com", "katana123");
+        cy.goTo("Formulários", "Consultoria");
 
-    it('Deve solicitar consultoria individual', () => {
-        cy.start()
-        cy.submitLoginForm('papito@webdojo.com', 'katana123')
-        cy.goTo('Formulários', 'Consultoria')
-
-        cy.get('input[placeholder="Digite seu nome completo"]').type('Fernando Papito')
-        cy.get('input[placeholder="Digite seu email"]').type('papito@webdojo.com')
+        cy.get('input[placeholder="Digite seu nome completo"]').type(
+            "Fernando Papito"
+        );
+        cy.get('input[placeholder="Digite seu email"]').type("papito@webdojo.com");
         cy.get('input[placeholder="(00) 00000-0000"]')
-            .type('11 99999-1000')
-            .should('have.value', '(11) 99999-1000')
+            .type("11 99999-1000")
+            .should("have.value", "(11) 99999-1000");
 
-        cy.contains('label', 'Tipo de Consultoria')
+        cy.contains("label", "Tipo de Consultoria")
             .parent()
-            .find('select')
-            .select('Individual')
+            .find("select")
+            .select("Individual");
 
-        cy.contains('label', 'Pessoa Física')
-            .find('input')
+        cy.contains("label", "Pessoa Física")
+            .find("input")
             .click()
-            .should('be.checked')
+            .should("be.checked");
 
-        cy.contains('label', 'Pessoa Jurídica')
-            .find('input')
-            .should('not.be.checked')
+        cy.contains("label", "Pessoa Jurídica")
+            .find("input")
+            .should("not.be.checked");
 
-        cy.contains('label', 'CPF')
+        cy.contains("label", "CPF")
             .parent()
-            .find('input')
-            .type('12345678901')
-            .should('have.value', '123.456.789-01')
+            .find("input")
+            .type("12345678901")
+            .should("have.value", "123.456.789-01");
 
         const discoveryChannels = [
-            'Instagram',
-            'LinkedIn',
-            'Udemy',
-            'YouTube',
-            'Indicação de Amigo'
-        ]
+            "Instagram",
+            "LinkedIn",
+            "Udemy",
+            "YouTube",
+            "Indicação de Amigo",
+        ];
 
-        discoveryChannels.forEach(channel => {
-            cy.contains('label', channel)
-                .find('input')
-                .check()
-                .should('be.checked')
-        })
+        discoveryChannels.forEach((channel) => {
+            cy.contains("label", channel).find("input").check().should("be.checked");
+        });
 
-        cy.get('input[type="file"]').selectFile('./cypress/fixtures/cypress_udemy.pdf', {force: true})
+        cy.get('input[type="file"]').selectFile(
+            "./cypress/fixtures/cypress_udemy.pdf",
+            { force: true }
+        );
 
-        cy.get('textarea[placeholder="Descreva mais detalhes sobre sua necessidade"]')
-            .type('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod')
+        cy.get(
+            'textarea[placeholder="Descreva mais detalhes sobre sua necessidade"]'
+        ).type(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
+        );
 
+        const techs = ["Cypress", "Robot Framework", "Python", "Java"];
 
-        const techs = [
-            'Cypress',
-            'Robot Framework',
-            'Python',
-            'Java'
-        ]
-
-        techs.forEach(tech => {
+        techs.forEach((tech) => {
             cy.get('input[placeholder="Digite uma tecnologia e pressione Enter"]')
                 .type(tech)
-                .type('{enter}')
+                .type("{enter}");
 
-            cy.contains('label', 'Tecnologias')
+            cy.contains("label", "Tecnologias")
                 .parent()
-                .contains('span', tech)
-                .should('be.visible')
-        })
+                .contains("span", tech)
+                .should("be.visible");
+        });
 
-        cy.contains('label', 'termos de uso')
-            .find('input')
+        cy.contains("label", "termos de uso")
+            .find("input")
             .check()
-            .should('be.checked')
+            .should("be.checked");
 
-        cy.get('button[type="submit"]').click() // OU cy.contains('button', 'Enviar Formulário').click()
+        cy.get('button[type="submit"]').click(); // OU cy.contains('button', 'Enviar Formulário').click()
 
-        cy.contains('Sua solicitação de consultoria foi enviada com sucesso! Em breve, nossa equipe entrará em contato através do email fornecido.')
-            .should('be.visible')
-    })
-})
+        cy.contains(
+            "Sua solicitação de consultoria foi enviada com sucesso! Em breve, nossa equipe entrará em contato através do email fornecido."
+        ).should("be.visible");
+    });
+
+    it.only("Deve verifica os campos obrigatórios", () => {
+        cy.start();
+        cy.submitLoginForm("papito@webdojo.com", "katana123");
+        cy.goTo("Formulários", "Consultoria");
+        cy.get('button[type="submit"]').click();
+
+        cy.contains("p", "Digite nome e sobrenome")
+            .should("be.visible") //garante que o texto está visível
+            .and('have.class', 'text-red-400') //valida a cor do texto
+            .and('have.css', 'color', 'rgb(248, 113, 113)'); //valida direto no css a cor do texto
+
+        cy.contains("p", "Informe um email válido")
+            .should("be.visible")
+            .and('have.class', 'text-red-400')
+            .and('have.css', 'color', 'rgb(248, 113, 113)');
+
+        cy.contains("p", "Você precisa aceitar os termos de uso")
+            .should("be.visible")
+            .and('have.class', 'text-red-400')
+            .and('have.css', 'color', 'rgb(248, 113, 113)');
+    });
+});
