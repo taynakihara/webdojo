@@ -4,9 +4,9 @@ describe("Formulário de Consultoria", () => {
         cy.submitLoginForm("papito@webdojo.com", "katana123");
         cy.goTo("Formulários", "Consultoria");
 
-        cy.get('input[placeholder="Digite seu nome completo"]').type(
-            "Fernando Papito"
-        );
+        cy.get('input[placeholder="Digite seu nome completo"]')
+            .type("Fernando Papito");
+
         cy.get('input[placeholder="Digite seu email"]').type("papito@webdojo.com");
         cy.get('input[placeholder="(00) 00000-0000"]')
             .type("11 99999-1000")
@@ -75,30 +75,41 @@ describe("Formulário de Consultoria", () => {
 
         cy.get('button[type="submit"]').click(); // OU cy.contains('button', 'Enviar Formulário').click()
 
-        cy.contains(
-            "Sua solicitação de consultoria foi enviada com sucesso! Em breve, nossa equipe entrará em contato através do email fornecido."
-        ).should("be.visible");
-    });
+        cy.get('.modal', { timeout: 10000 }) //modal da mensagem de sucesso
+            .should("be.visible") //garante que o modal está visível
+            .find('.modal-content') //procura o conteúdo do modal
+            .should("be.visible") //garante que o conteúdo está visível
+            .and('have.text', 'Sua solicitação de consultoria foi enviada com sucesso! Em breve, nossa equipe entrará em contato através do email fornecido.'); //valida o texto exato do conteúdo
 
-    it.only("Deve verifica os campos obrigatórios", () => {
-        cy.start();
-        cy.submitLoginForm("papito@webdojo.com", "katana123");
-        cy.goTo("Formulários", "Consultoria");
-        cy.get('button[type="submit"]').click();
+        it("Deve verifica os campos obrigatórios", () => {
+            cy.start();
+            cy.submitLoginForm("papito@webdojo.com", "katana123");
+            cy.goTo("Formulários", "Consultoria");
+            cy.get('button[type="submit"]').click();
 
-        cy.contains("p", "Digite nome e sobrenome")
-            .should("be.visible") //garante que o texto está visível
-            .and('have.class', 'text-red-400') //valida a cor do texto
-            .and('have.css', 'color', 'rgb(248, 113, 113)'); //valida direto no css a cor do texto
+            cy.contains('label', 'Nome Completo')
+                .parent() //navega ao pai do label
+                .find('p') //procura o parágrafo dentro do pai
+                .should("be.visible") //garante que o texto está visível
+                .should('have.text', 'Campo obrigatório') //valida o texto exato
+                .and('have.class', 'text-red-400') //valida a cor do texto
+                .and('have.css', 'color', 'rgb(248, 113, 113)'); //valida direto no css a cor do texto
 
-        cy.contains("p", "Informe um email válido")
-            .should("be.visible")
-            .and('have.class', 'text-red-400')
-            .and('have.css', 'color', 'rgb(248, 113, 113)');
+            cy.contains('label', 'Email')
+                .parent()
+                .find('p')
+                .should("be.visible")
+                .should('have.text', 'Campo obrigatório')
+                .and('have.class', 'text-red-400')
+                .and('have.css', 'color', 'rgb(248, 113, 113)');
 
-        cy.contains("p", "Você precisa aceitar os termos de uso")
-            .should("be.visible")
-            .and('have.class', 'text-red-400')
-            .and('have.css', 'color', 'rgb(248, 113, 113)');
+            cy.contains('label', 'termos de uso')
+                .parent()
+                .find('p')
+                .should("be.visible")
+                .should('have.text', 'Você precisa aceitar os termos de uso')
+                .and('have.class', 'text-red-400')
+                .and('have.css', 'color', 'rgb(248, 113, 113)');
+        });
     });
 });

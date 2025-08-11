@@ -10,7 +10,7 @@ describe('Login', () => {
     cy.get('[data-cy="welcome-message"]')
       .should('be.visible')
       .and('have.text', 'Olá QA, esse é o seu Dojo para aprender Automação de Testes.')
-    })
+  })
 })
 
 describe('Login', () => {
@@ -20,7 +20,7 @@ describe('Login', () => {
 
     cy.contains('Acesso negado! Tente novamente.')
       .should('be.visible')
-    })
+  })
 })
 
 describe('Login', () => {
@@ -30,5 +30,5 @@ describe('Login', () => {
 
     cy.contains('Acesso negado! Tente novamente.')
       .should('be.visible')
-    })
+  })
 })
