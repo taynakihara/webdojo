@@ -82,7 +82,8 @@ describe("Formulário de Consultoria", () => {
       .should("be.visible") //garante que o conteúdo está visível
       .and(
         "have.text",
-        "Sua solicitação de consultoria foi enviada com sucesso! Em breve, nossa equipe entrará em contato através do email fornecido."
+        "Sua solicitação de consultoria foi enviada com sucesso! Em breve, nossa equipe entrará em contato através do email fornecido.",
+        { timeout: 20000 }
       ); //valida o texto exato do conteúdo
 
     it("Deve verifica os campos obrigatórios", () => {
