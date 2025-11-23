@@ -4,37 +4,16 @@ describe('Formulário de Consultoria', () => {
   //   cy.log('Isso acontece uma vez antes de todos os testes');
   // }); //executa uma vez antes de todos os it
 
-  beforeEach(() => {
-    cy.login();
-    cy.goTo('Formulários', 'Consultoria');
-  }); //executa antes de cada it
+  beforeEach(() => { //executa antes de cada it
+    cy.login()
+    cy.goTo('Formulários', 'Consultoria')
 
-  it('Deve solicitar consultoria individual', () => {
+    cy.fixture('consultancy').as('consultancyData')
+  }); 
 
-    const consultancyForm = {
-      name: 'Fernando Papito',
-      email: 'papito@webdojo.com',
-      phone: '11 99999-1000',
-      consultancyType: 'Individual',
-      personType: 'cpf',
-      document: '12345678901',
-      discoveryChannels: [
-        'Instagram',
-        'LinkedIn',
-        'Udemy',
-        'YouTube',
-        'Indicação de Amigo',
-      ],
-      file: './cypress/fixtures/cypress_udemy.pdf',
-      description: 'Lorem ipsum dolor sit amet',
-      techs: [
-        'Cypress',
-        'Robot Framework',
-        'Python',
-        'Java'
-      ],
-      terms: true
-    }
+  it('Deve solicitar consultoria individual', function() {
+
+    const consultancyForm = this.consultancyData.personal //this dá acesso ao contexto definido em uma função externa (nesse caso está dentro do beforeEach)
 
     cy.get('input[placeholder="Digite seu nome completo"]').type(
       'Fernando Papito'
@@ -132,25 +111,9 @@ describe('Formulário de Consultoria', () => {
       ); //valida o texto exato do conteúdo
   });
 
-  it.only('Deve solicitar consultoria In Company', () => {
+  it('Deve solicitar consultoria In Company', function() {
 
-    const consultancyForm = {
-      name: 'Fernando Papito',
-      email: 'papito@webdojo.com',
-      phone: '11 99999-1000',
-      consultancyType: 'In Company',
-      personType: 'cnpj',
-      document: '56974432000158',
-      discoveryChannels: [
-        'LinkedIn',
-      ],
-      file: './cypress/fixtures/cypress_udemy.pdf',
-      description: 'Lorem ipsum dolor sit amet',
-      techs: [
-        'Cypress',
-      ],
-      terms: true
-    }
+    const consultancyForm = this.consultancyData.company
 
     cy.get('input[placeholder="Digite seu nome completo"]').type(
       'Fernando Papito'
