@@ -1,31 +1,32 @@
-describe("Login", () => {
-  it("Deve fazer login com sucesso", () => {
+describe('Login', () => {
+  
+  it('Deve fazer login com sucesso', () => {
     cy.start();
-    cy.submitLoginForm("papito@webdojo.com", "katana123");
+    cy.submitLoginForm('papito@webdojo.com', 'katana123');
 
     cy.get('[data-cy="user-name"]')
-      .should("be.visible")
-      .and("have.text", "Fernando Papito");
+      .should('be.visible')
+      .and('have.text', 'Fernando Papito');
 
     cy.get('[data-cy="welcome-message"]')
-      .should("be.visible")
+      .should('be.visible')
       .and(
-        "have.text",
-        "Olá QA, esse é o seu Dojo para aprender Automação de Testes."
+        'have.text',
+        'Olá QA, esse é o seu Dojo para aprender Automação de Testes.'
       );
   });
 
-  it("Não deve logar com senha inválida", () => {
+  it('Não deve logar com senha inválida', () => {
     cy.start(); // o skip pula esse teste
-    cy.submitLoginForm("papito@webdojo.com", "katana1321");
+    cy.submitLoginForm('papito@webdojo.com', 'katana1321');
 
-    cy.contains("Acesso negado! Tente novamente.").should("be.visible");
+    cy.contains('Acesso negado! Tente novamente.').should('be.visible');
   });
 
-  it("Não deve logar com email não cadastrado", () => {
+  it('Não deve logar com email não cadastrado', () => {
     cy.start(); //it.only excuta somente esse teste
-    cy.submitLoginForm("tayna@webdojo.com", "katana123");
+    cy.submitLoginForm('tayna@webdojo.com', 'katana123');
 
-    cy.contains("Acesso negado! Tente novamente.").should("be.visible");
+    cy.contains('Acesso negado! Tente novamente.').should('be.visible');
   });
 });
